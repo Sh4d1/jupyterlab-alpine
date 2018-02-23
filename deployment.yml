@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: jupyterlab
+spec:
+    selector:
+        matchLabels:
+            app: jupyterlab
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: jupyterlab
+        spec:
+            containers:
+            - name: jupyterlab
+              image: sh4d1/jupyterlab:alpine
+              ports:
+              - containerPort: 8888
+                name: jupyterlab-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: jupyterlab
+    labels:
+        apps: jupyterlab
+spec:
+    selector:
+      app: jupyterlab
+    ports:
+      - protocol: TCP
+        port: 8888
+        targetPort: jupyterlab-port
+        name: web
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: jupyterlab
+    annotations:
+        kubernetes.io/ingress.class: traefik
+spec:
+    rules:
+      - host: "notebook"
+        http:
+            paths:
+              - path: /
+                backend: 
+                    serviceName: jupyterlab
+                    servicePort: web
