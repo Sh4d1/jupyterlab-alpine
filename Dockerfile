@@ -31,7 +31,7 @@ RUN adduser -D -u $NB_UID $NB_USER && \
 
 RUN pip install notebook && pip install ipywidgets && pip install jupyterlab
 COPY requirements.txt requirements.txt
-#RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 8888
 
