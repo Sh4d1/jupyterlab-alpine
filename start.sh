@@ -1,3 +1,5 @@
-#!/bin/bash set -e
+#!/bin/bash 
+
+set -e
 
 exec jupyter lab --no-browser 
